@@ -7,7 +7,7 @@ export default function ExitIntentPopup({ onClose, onPurchase }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[90] flex items-center justify-center p-4"
+            style={{ padding: '16px', position: 'fixed', inset: 0, zIndex: 90, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={onClose}
         >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
@@ -50,10 +50,10 @@ export default function ExitIntentPopup({ onClose, onPurchase }) {
                     </p>
 
                     {/* Special Price */}
-                    <div className="inline-flex items-center gap-3 glass-card px-6 py-3 mb-6">
-                        <span className="text-gray-500 line-through text-lg">₹499</span>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '12px 24px', marginBottom: '24px' }}>
+                        <span style={{ color: '#6b7280', textDecoration: 'line-through', fontSize: '18px' }}>₹499</span>
                         <ArrowRight className="w-4 h-4 text-gray-600" />
-                        <span className="text-2xl font-extrabold gradient-text-gold">₹219</span>
+                        <span className="gradient-text-gold" style={{ fontSize: '24px', fontWeight: 800 }}>₹219</span>
                     </div>
 
                     <div className="flex items-center justify-center gap-2 text-sm text-red-400 mb-6">

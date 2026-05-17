@@ -14,7 +14,7 @@ const included = [
     '30-Day Money-Back Guarantee',
 ]
 
-export default function Pricing({ hasPurchased, onPurchase, onDownload }) {
+export default function Pricing({ onPurchase }) {
     const ref = useRef(null)
     const isInView = useInView(ref, { once: true, margin: '-100px' })
 
@@ -121,23 +121,13 @@ export default function Pricing({ hasPurchased, onPurchase, onDownload }) {
 
                             {/* CTA Button */}
                             <div className="text-center">
-                                {hasPurchased ? (
-                                    <button
-                                        onClick={onDownload}
-                                        className="btn-download text-base sm:text-lg py-4 sm:py-5 px-8 sm:px-12 w-full sm:w-auto flex items-center justify-center gap-2 mx-auto"
-                                    >
-                                        <CheckCircle className="w-5 h-5" />
-                                        Download Your Book
-                                    </button>
-                                ) : (
-                                    <button
+                                <button
                                         onClick={onPurchase}
                                         className="btn-primary text-base sm:text-lg py-4 sm:py-5 px-8 sm:px-12 w-full sm:w-auto flex items-center justify-center gap-2 mx-auto group"
                                     >
                                         <span>Get Instant Access — ₹219</span>
                                         <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                                     </button>
-                                )}
 
                                 <div className="flex items-center justify-center gap-4 mt-6">
                                     <div className="flex items-center gap-1 text-xs text-gray-500">

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 
-export default function Navbar({ hasPurchased, onPurchase, onDownload }) {
+export default function Navbar({ onPurchase }) {
     const [scrolled, setScrolled] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false)
 
@@ -50,15 +50,9 @@ export default function Navbar({ hasPurchased, onPurchase, onDownload }) {
 
                     {/* CTA */}
                     <div className="hidden sm:block">
-                        {hasPurchased ? (
-                            <button onClick={onDownload} className="btn-download text-sm py-2.5 px-6">
-                                ✦ Download Now
-                            </button>
-                        ) : (
-                            <button onClick={onPurchase} className="btn-primary text-sm py-2.5 px-6">
-                                <span>Get Access</span>
-                            </button>
-                        )}
+                        <button onClick={onPurchase} className="btn-primary text-sm py-2.5 px-6">
+                            <span>Get Access</span>
+                        </button>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -91,15 +85,9 @@ export default function Navbar({ hasPurchased, onPurchase, onDownload }) {
                             </a>
                         ))}
                         <div className="pt-3">
-                            {hasPurchased ? (
-                                <button onClick={onDownload} className="btn-download text-sm py-2.5 px-6 w-full">
-                                    ✦ Download Now
-                                </button>
-                            ) : (
-                                <button onClick={() => { onPurchase(); setMenuOpen(false) }} className="btn-primary text-sm py-2.5 px-6 w-full">
-                                    <span>Get Access</span>
-                                </button>
-                            )}
+                            <button onClick={() => { onPurchase(); setMenuOpen(false) }} className="btn-primary text-sm py-2.5 px-6 w-full">
+                                <span>Get Access</span>
+                            </button>
                         </div>
                     </div>
                 </motion.div>

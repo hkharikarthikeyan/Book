@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
-import { ArrowRight, CheckCircle, X } from 'lucide-react'
+import { ArrowRight, X } from 'lucide-react'
 
-export default function StickyCTA({ hasPurchased, onPurchase, onDownload }) {
+export default function StickyCTA({ onPurchase }) {
     const [visible, setVisible] = useState(false)
     const [dismissed, setDismissed] = useState(false)
 
@@ -33,23 +33,13 @@ export default function StickyCTA({ hasPurchased, onPurchase, onDownload }) {
                         </div>
 
                         <div className="flex items-center gap-3 w-full sm:w-auto">
-                            {hasPurchased ? (
-                                <button
-                                    onClick={onDownload}
-                                    className="btn-download text-xs sm:text-sm py-2 sm:py-2.5 px-4 sm:px-6 flex items-center gap-2 w-full sm:w-auto justify-center"
-                                >
-                                    <CheckCircle className="w-4 h-4" />
-                                    Download Now
-                                </button>
-                            ) : (
-                                <button
+                            <button
                                     onClick={onPurchase}
                                     className="btn-primary text-xs sm:text-sm py-2 sm:py-2.5 px-4 sm:px-6 flex items-center gap-2 w-full sm:w-auto justify-center group"
                                 >
                                     <span>Get Access — ₹219</span>
                                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                                 </button>
-                            )}
                             <button
                                 onClick={() => setDismissed(true)}
                                 className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors shrink-0"

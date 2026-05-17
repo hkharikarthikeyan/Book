@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Shield, Zap, TrendingUp, Star, Users, CheckCircle } from 'lucide-react'
+import { ArrowRight, Shield, Zap, TrendingUp, Star } from 'lucide-react'
 
-export default function Hero({ hasPurchased, onPurchase, onDownload }) {
+export default function Hero({ onPurchase }) {
     return (
         <section style={{ paddingTop: '70px' }} className="relative min-h-screen flex items-center justify-center overflow-hidden pb-12 sm:pb-20">
             {/* Background Effects */}
@@ -81,17 +81,10 @@ export default function Hero({ hasPurchased, onPurchase, onDownload }) {
                             transition={{ delay: 0.7 }}
                             className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
                         >
-                            {hasPurchased ? (
-                                <button onClick={onDownload} className="btn-download text-base sm:text-lg py-3 sm:py-4 px-8 sm:px-10 flex items-center gap-2 w-full sm:w-auto justify-center">
-                                    <CheckCircle className="w-5 h-5" />
-                                    Download Your Book
-                                </button>
-                            ) : (
-                                <button onClick={onPurchase} className="btn-primary text-base sm:text-lg py-3 sm:py-4 px-8 sm:px-10 flex items-center gap-2 group w-full sm:w-auto justify-center">
+                            <button onClick={onPurchase} className="btn-primary text-base sm:text-lg py-3 sm:py-4 px-8 sm:px-10 flex items-center gap-2 group w-full sm:w-auto justify-center">
                                     <span>Get Instant Access</span>
                                     <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                                 </button>
-                            )}
                             <span className="text-sm text-gray-500">
                                 ⚡ Instant digital delivery • 30-day guarantee
                             </span>
