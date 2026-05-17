@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* ===== Custom Theme ===== */
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+
+  --color-dark-950: #0f0a06;
+  --color-dark-900: #1a120b;
+  --color-dark-800: #291c12;
+  --color-dark-700: #3b281a;
+  --color-dark-600: #4f3624;
+
+  --color-gold-400: #fce58d;
+  --color-gold-500: #eab853;
+  --color-gold-600: #ce9546;
+
+  --color-bronze-400: #ce9546;
+  --color-bronze-500: #b26b36;
+  --color-bronze-600: #8c4c20;
+
+  --color-amber-400: #f3ce69;
+  --color-amber-500: #d4a045;
+  --color-amber-600: #b26b36;
+}
+
+/* ===== Global Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-dark-950);
+  color: #e2e8f0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-dark-900);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-bronze-500), var(--color-gold-500));
+  border-radius: 3px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(178, 107, 54, 0.3);
+  color: #fff;
+}
+
+/* ===== Utility Classes ===== */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-gold-400), var(--color-bronze-400), var(--color-amber-400));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, var(--color-gold-400), var(--color-gold-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+@media (min-width: 640px) {
+  .glass-card {
+    padding: 32px;
+  }
+}
+
+.glow-bronze {
+  box-shadow: 0 0 40px rgba(178, 107, 54, 0.15), 0 0 80px rgba(178, 107, 54, 0.05);
+}
+
+.glow-gold {
+  box-shadow: 0 0 40px rgba(234, 184, 83, 0.15), 0 0 80px rgba(234, 184, 83, 0.05);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-gold-400), var(--color-gold-600));
+  color: #0f0a06;
+  font-weight: 700;
+  padding: 16px 40px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--color-gold-500), var(--color-bronze-500));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(246, 211, 101, 0.3);
+}
+.btn-primary:hover::before {
+  opacity: 1;
+}
+.btn-primary span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-download {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  font-weight: 700;
+  padding: 16px 40px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+.btn-download:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(34, 197, 94, 0.3);
+}
+
+.section-padding {
+  padding: 100px 24px;
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding: 60px 20px;
+  }
+
+  .btn-primary,
+  .btn-download {
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+}
+
+.container-pad {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media (min-width: 640px) {
+  .container-pad {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+/* Noise texture overlay */
+.noise-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
