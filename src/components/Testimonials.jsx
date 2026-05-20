@@ -1,78 +1,26 @@
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react'
+import { Star, ChevronLeft, ChevronRight, Quote, PenLine } from 'lucide-react'
+import ReviewForm from './ReviewForm'
 
-const testimonials = [
-    {
-        name: 'Priya Sharma',
-        role: 'Digital Marketing Consultant',
-        avatar: 'PS',
-        color: 'from-bronze-400 to-pink-400',
-        rating: 5,
-        result: '3x Revenue in 60 Days',
-        text: 'The RGCCO Formula completely transformed my business. I went from randomly posting on social media to having a fully automated AI-powered funnel that generates leads 24/7. My revenue tripled in just two months!',
-    },
-    {
-        name: 'Rahul Patel',
-        role: 'E-commerce Founder',
-        avatar: 'RP',
-        color: 'from-blue-400 to-cyan-400',
-        rating: 5,
-        result: '10x ROAS on Ads',
-        text: 'I was burning money on ads before this book. The AI optimization strategies taught me how to reduce my cost per acquisition by 80% while scaling to 6 figures. This book paid for itself 1000x over.',
-    },
-    {
-        name: 'Ananya Singh',
-        role: 'Course Creator',
-        avatar: 'AS',
-        color: 'from-gold-400 to-orange-400',
-        rating: 5,
-        result: '₹15L in First Launch',
-        text: 'My first course launch using the RGCCO system generated ₹15 lakhs. The step-by-step templates made it so easy — I just followed the framework and the results spoke for themselves.',
-    },
-    {
-        name: 'Vikram Mehta',
-        role: 'SaaS Startup CEO',
-        avatar: 'VM',
-        color: 'from-green-400 to-emerald-400',
-        rating: 5,
-        result: '500+ Signups in 7 Days',
-        text: 'We went from 0 to 500+ paid signups in our first week using the RGCCO Formula. The AI-powered content strategy and conversion optimization techniques are genius. A must-read for any founder.',
-    },
-    {
-        name: 'Meera Joshi',
-        role: 'Freelance Designer',
-        avatar: 'MJ',
-        color: 'from-pink-400 to-rose-400',
-        rating: 5,
-        result: 'Fully Booked in 30 Days',
-        text: 'As a freelancer, I struggled to find clients consistently. After applying the RGCCO Formula, I had a waiting list within a month. The automation chapter alone is worth 100x the price.',
-    },
-    {
-        name: 'Arjun Reddy',
-        role: 'Agency Owner',
-        avatar: 'AR',
-        color: 'from-indigo-400 to-violet-400',
-        rating: 5,
-        result: 'Scaled to ₹50L/month',
-        text: 'This book gave my agency the exact system we needed to scale. The RGCCO Formula isn\'t theory — it\'s a battle-tested playbook. We 5x\'d our monthly revenue in under 90 days.',
-    },
+const avatarColors = [
+    'from-bronze-400 to-pink-400', 'from-blue-400 to-cyan-400',
+    'from-gold-400 to-orange-400', 'from-green-400 to-emerald-400',
+    'from-pink-400 to-rose-400', 'from-indigo-400 to-violet-400',
 ]
 
-function TestimonialCard({ t }) {
+function getAvatar(name) {
+    return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+}
+
+function TestimonialCard({ t, index }) {
     return (
-        <div className="glass-card h-full hover:border-bronze-500/20 transition-all duration-500 group relative">
-            <Quote className="absolute top-5 right-5 sm:top-8 sm:right-8 w-8 h-8 sm:w-12 sm:h-12 text-bronze-500/10" />
-
-            <div className="relative inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 mb-4 sm:mb-6">
-                <span className="text-xs font-bold text-green-400">✦ {t.result}</span>
-            </div>
-
-            <p className="text-gray-300 leading-relaxed mb-4 sm:mb-6 text-sm line-clamp-4 sm:line-clamp-none">"{t.text}"</p>
-
-            <div className="flex items-center gap-3 pt-3 sm:pt-4 border-t border-white/5">
-                <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-xs sm:text-sm font-bold text-dark-950 shrink-0`}>
-                    {t.avatar}
+        <div className="glass-card h-full hover:border-bronze-500/20 transition-all duration-500 relative">
+            <Quote className="absolute top-5 right-5 w-8 h-8 text-bronze-500/10" />
+            <p className="text-gray-300 leading-relaxed mb-4 text-sm">"{t.text}"</p>
+            <div className="flex items-center gap-3 pt-3 border-t border-white/5">
+                <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${avatarColors[index % avatarColors.length]} flex items-center justify-center text-xs font-bold text-dark-950 shrink-0`}>
+                    {getAvatar(t.name)}
                 </div>
                 <div className="min-w-0">
                     <p className="font-semibold text-white text-sm truncate">{t.name}</p>
@@ -94,10 +42,12 @@ export default function Testimonials() {
     const [current, setCurrent] = useState(0)
     const [autoplay, setAutoplay] = useState(true)
     const [isMobile, setIsMobile] = useState(false)
+    const [showForm, setShowForm] = useState(false)
+    const [reviews, setReviews] = useState([])
+    const [loading, setLoading] = useState(true)
     const touchStartX = useRef(0)
     const touchEndX = useRef(0)
 
-    // Responsive: listen for resize
     useEffect(() => {
         const check = () => setIsMobile(window.innerWidth < 768)
         check()
@@ -105,34 +55,41 @@ export default function Testimonials() {
         return () => window.removeEventListener('resize', check)
     }, [])
 
+    const fetchReviews = useCallback(async () => {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews`)
+            const data = await res.json()
+            setReviews(data)
+        } catch {
+            setReviews([])
+        } finally {
+            setLoading(false)
+        }
+    }, [])
+
+    useEffect(() => { fetchReviews() }, [fetchReviews])
+
     const itemsPerView = isMobile ? 1 : 2
-    const maxIndex = Math.max(0, testimonials.length - itemsPerView)
+    const maxIndex = Math.max(0, reviews.length - itemsPerView)
 
-    // Reset current if it exceeds new maxIndex on resize
-    useEffect(() => {
-        if (current > maxIndex) setCurrent(maxIndex)
-    }, [maxIndex, current])
+    useEffect(() => { setCurrent(0) }, [reviews.length])
 
     useEffect(() => {
-        if (!autoplay) return
+        if (!autoplay || reviews.length === 0) return
         const timer = setInterval(() => {
             setCurrent(prev => prev >= maxIndex ? 0 : prev + 1)
         }, 4000)
         return () => clearInterval(timer)
-    }, [autoplay, maxIndex])
+    }, [autoplay, maxIndex, reviews.length])
 
     const goNext = useCallback(() => setCurrent(prev => Math.min(maxIndex, prev + 1)), [maxIndex])
     const goPrev = useCallback(() => setCurrent(prev => Math.max(0, prev - 1)), [])
 
-    // Touch/swipe support for mobile
     const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX }
     const handleTouchMove = (e) => { touchEndX.current = e.touches[0].clientX }
     const handleTouchEnd = () => {
         const diff = touchStartX.current - touchEndX.current
-        if (Math.abs(diff) > 50) {
-            if (diff > 0) goNext()
-            else goPrev()
-        }
+        if (Math.abs(diff) > 50) { diff > 0 ? goNext() : goPrev() }
     }
 
     const slideWidth = 100 / itemsPerView
@@ -142,7 +99,6 @@ export default function Testimonials() {
 
     return (
         <section id="testimonials" className="section-padding relative overflow-hidden">
-            {/* Background */}
             <div className="absolute inset-0">
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-bronze-500/20 to-transparent" />
                 <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] bg-bronze-500/5 rounded-full blur-[120px]" />
@@ -154,79 +110,91 @@ export default function Testimonials() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-10 sm:mb-16"
+                    className="text-center mb-10"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-bronze-500/20 bg-bronze-500/5 mb-4 sm:mb-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-bronze-500/20 bg-bronze-500/5 mb-4">
                         <Star className="w-4 h-4 text-bronze-400" fill="currentColor" />
                         <span className="text-sm text-bronze-400 font-medium">Real Results</span>
                     </div>
-                    <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 sm:mb-6">
+                    <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4">
                         What Our <span className="gradient-text">Readers Say</span>
                     </h2>
-                    <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed px-4">
-                        Join thousands of entrepreneurs who've transformed their business with the RGCCO Formula.
+                    <p className="text-base text-gray-400 max-w-2xl mx-auto leading-relaxed px-4 mb-6">
+                        Real reviews from real readers. No fake testimonials.
                     </p>
+                    <button
+                        onClick={() => setShowForm(true)}
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '10px 20px', borderRadius: '10px', border: '1px solid rgba(252,229,141,0.3)', background: 'rgba(252,229,141,0.05)', color: '#fce58d', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}
+                    >
+                        <PenLine className="w-4 h-4" />
+                        Write a Review
+                    </button>
                 </motion.div>
 
-                {/* Carousel */}
-                <div
-                    className="relative"
-                    onMouseEnter={() => setAutoplay(false)}
-                    onMouseLeave={() => setAutoplay(true)}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                >
-                    <div className="overflow-hidden">
-                        <motion.div
-                            className="flex"
-                            style={{ gap: `${gapPx}px` }}
-                            animate={{ x: `calc(-${offsetPercent}% - ${offsetGap}px)` }}
-                            transition={{ type: 'spring', stiffness: 200, damping: 30 }}
-                        >
-                            {testimonials.map((t, i) => (
-                                <div
-                                    key={i}
-                                    className="shrink-0"
-                                    style={{ width: `calc(${slideWidth}% - ${gapPx * (itemsPerView - 1) / itemsPerView}px)` }}
-                                >
-                                    <TestimonialCard t={t} />
-                                </div>
-                            ))}
-                        </motion.div>
+                {/* Reviews Content */}
+                {loading ? (
+                    <div style={{ textAlign: 'center', padding: '40px 0', color: '#9ca3af', fontSize: '15px' }}>
+                        Loading reviews...
                     </div>
-
-                    {/* Navigation */}
-                    <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
-                        <button
-                            onClick={goPrev}
-                            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-colors disabled:opacity-30"
-                            disabled={current === 0}
-                        >
-                            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                        </button>
-
-                        <div className="flex gap-1.5 sm:gap-2">
-                            {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setCurrent(i)}
-                                    className={`h-2 rounded-full transition-all duration-300 ${i === current ? 'w-6 sm:w-8 bg-gradient-to-r from-gold-400 to-bronze-500' : 'w-2 bg-white/20'
-                                        }`}
-                                />
-                            ))}
+                ) : reviews.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                        <p style={{ color: '#9ca3af', fontSize: '16px' }}>No reviews yet. Be the first to share your experience!</p>
+                    </div>
+                ) : (
+                    <div
+                        className="relative"
+                        onMouseEnter={() => setAutoplay(false)}
+                        onMouseLeave={() => setAutoplay(true)}
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                    >
+                        <div className="overflow-hidden">
+                            <motion.div
+                                className="flex"
+                                style={{ gap: `${gapPx}px` }}
+                                animate={{ x: `calc(-${offsetPercent}% - ${offsetGap}px)` }}
+                                transition={{ type: 'spring', stiffness: 200, damping: 30 }}
+                            >
+                                {reviews.map((t, i) => (
+                                    <div key={t.id || i} className="shrink-0" style={{ width: `calc(${slideWidth}% - ${gapPx * (itemsPerView - 1) / itemsPerView}px)` }}>
+                                        <TestimonialCard t={t} index={i} />
+                                    </div>
+                                ))}
+                            </motion.div>
                         </div>
 
-                        <button
-                            onClick={goNext}
-                            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-colors disabled:opacity-30"
-                            disabled={current >= maxIndex}
-                        >
-                            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                        </button>
+                        {reviews.length > itemsPerView && (
+                            <div className="flex items-center justify-center gap-3 mt-6">
+                                <button onClick={goPrev} disabled={current === 0}
+                                    className="w-9 h-9 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-colors disabled:opacity-30">
+                                    <ChevronLeft className="w-4 h-4 text-white" />
+                                </button>
+                                <div className="flex gap-1.5">
+                                    {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+                                        <button key={i} onClick={() => setCurrent(i)}
+                                            style={{ height: '8px', borderRadius: '4px', border: 'none', cursor: 'pointer', transition: 'all 0.3s', width: i === current ? '24px' : '8px', background: i === current ? '#fce58d' : 'rgba(255,255,255,0.2)' }}
+                                        />
+                                    ))}
+                                </div>
+                                <button onClick={goNext} disabled={current >= maxIndex}
+                                    className="w-9 h-9 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-colors disabled:opacity-30">
+                                    <ChevronRight className="w-4 h-4 text-white" />
+                                </button>
+                            </div>
+                        )}
                     </div>
-                </div>
+                )}
             </div>
+
+            <AnimatePresence>
+                {showForm && (
+                    <ReviewForm
+                        onClose={() => setShowForm(false)}
+                        onSubmitted={fetchReviews}
+                    />
+                )}
+            </AnimatePresence>
         </section>
     )
 }
