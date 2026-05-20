@@ -1,5 +1,5 @@
 import { motion, useInView } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Search, Magnet, Repeat, BarChart3, Rocket, ArrowRight } from 'lucide-react'
 
 const steps = [
@@ -58,19 +58,16 @@ const steps = [
 function StepCard({ step, index }) {
     const ref = useRef(null)
     const isInView = useInView(ref, { once: true, margin: '-50px' })
-    const [isHovered, setIsHovered] = useState(false)
 
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
+            initial={{ opacity: 0, x: 0 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: index * 0.1, ease: 'easeOut' }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            transition={{ duration: 0.5, delay: index * 0.05, ease: 'easeOut' }}
             className="relative group"
         >
-            <div className={`glass-card transition-all duration-500 ${isHovered ? 'border-white/15 scale-[1.02]' : ''}`}>
+            <div className="glass-card">
                 <div className="flex flex-col sm:flex-row gap-6">
                     {/* Step Number & Icon */}
                     <div className="shrink-0">
@@ -78,11 +75,7 @@ function StepCard({ step, index }) {
                             <span className={`text-2xl sm:text-3xl font-extrabold bg-gradient-to-br ${step.color} bg-clip-text text-transparent`}>
                                 {step.letter}
                             </span>
-                            <motion.div
-                                animate={isHovered ? { scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] } : {}}
-                                transition={{ duration: 1.5, repeat: Infinity }}
-                                className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${step.color} opacity-0`}
-                            />
+                            <motion.div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${step.color} opacity-0`} />
                         </div>
                         <div className="hidden sm:flex justify-center mt-2">
                             <span className="text-xs text-gray-600 font-mono">Step {index + 1}/5</span>

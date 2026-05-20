@@ -4,15 +4,15 @@ import { ArrowRight, Shield, Zap, TrendingUp, Star } from 'lucide-react'
 export default function Hero({ onPurchase }) {
     return (
         <section style={{ paddingTop: '70px' }} className="relative min-h-screen flex items-center justify-center overflow-hidden pb-12 sm:pb-20">
-            {/* Background Effects */}
-            <div className="absolute inset-0">
-                <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-bronze-600/20 rounded-full blur-[128px] animate-pulse" />
-                <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-gold-400/10 rounded-full blur-[128px] animate-pulse" style={{ animationDelay: '1s' }} />
+            {/* Background Effects - hidden on mobile for performance */}
+            <div className="absolute inset-0 hidden sm:block">
+                <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-bronze-600/20 rounded-full blur-[128px]" />
+                <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-gold-400/10 rounded-full blur-[128px]" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-amber-500/5 rounded-full blur-[128px]" />
             </div>
 
-            {/* Grid Pattern */}
-            <div className="absolute inset-0 opacity-[0.02]" style={{
+            {/* Grid Pattern - hidden on mobile */}
+            <div className="absolute inset-0 opacity-[0.02] hidden sm:block" style={{
                 backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
                 backgroundSize: '60px 60px'
             }} />
@@ -125,24 +125,26 @@ export default function Hero({ onPurchase }) {
                             <motion.div
                                 animate={{ y: [0, -10, 0] }}
                                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                                className="relative"
-                            >
+                                style={{ willChange: 'transform' }}
+                                className="relative">
                                 {/* Book */}
                                 <div className="relative w-48 sm:w-80 lg:w-96 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl shadow-bronze-500/20 border border-white/10 group-hover:shadow-bronze-500/30 transition-shadow duration-500 bg-white mx-auto">
                                     <img 
                                         src="/book-cover.png" 
                                         alt="Talk to AI - Master Communication" 
+                                        loading="eager"
+                                        decoding="async"
                                         className="w-full h-full object-cover"
                                     />
                                     {/* Spine effect */}
                                     <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/20 to-transparent pointer-events-none" />
                                 </div>
 
-                                {/* Floating elements */}
+                                {/* Floating badges - hidden on mobile */}
                                 <motion.div
                                     animate={{ y: [0, -8, 0], rotate: [0, 5, 0] }}
                                     transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-                                    className="absolute -top-2 -right-2 sm:-top-4 sm:-right-4 glass-card p-2 sm:p-3 flex items-center gap-1.5 sm:gap-2 max-w-[120px] sm:max-w-none"
+                                    className="hidden sm:flex absolute -top-4 -right-4 glass-card p-3 items-center gap-2"
                                 >
                                     <div className="flex -space-x-2">
                                         {[...Array(3)].map((_, i) => (
@@ -158,7 +160,7 @@ export default function Hero({ onPurchase }) {
                                 <motion.div
                                     animate={{ y: [0, 6, 0], rotate: [0, -3, 0] }}
                                     transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                                    className="absolute -bottom-2 -left-2 sm:-bottom-4 sm:-left-4 glass-card p-2 sm:p-3 flex items-center gap-1.5 sm:gap-2 max-w-[110px] sm:max-w-none"
+                                    className="hidden sm:flex absolute -bottom-4 -left-4 glass-card p-3 items-center gap-2"
                                 >
                                     <div className="flex gap-0.5">
                                         {[...Array(5)].map((_, i) => (

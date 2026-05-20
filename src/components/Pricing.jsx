@@ -6,8 +6,6 @@ import CountdownTimer from './CountdownTimer'
 const included = [
     'Complete RGCCO Formula Book (200+ pages)',
     'AI Tools Mastery Guide',
-    'Video Masterclass (3+ hours)',
-    '200+ AI Prompt Library',
     'Ready-to-Deploy Funnel Templates',
     'Private Community (Lifetime Access)',
     'Monthly Updates & New Strategies',
@@ -52,7 +50,7 @@ export default function Pricing({ onPurchase }) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="mb-12"
+                    style={{ marginBottom: '30px' }}
                 >
                     <p className="text-center text-red-400 font-medium mb-4 flex items-center justify-center gap-2">
                         <Clock className="w-4 h-4 animate-pulse" />

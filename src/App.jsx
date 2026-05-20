@@ -1,16 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import Problem from './components/Problem'
-import WhatsInside from './components/WhatsInside'
-import Transformation from './components/Transformation'
-import Testimonials from './components/Testimonials'
-import Pricing from './components/Pricing'
-import FAQ from './components/FAQ'
-import ExitIntentPopup from './components/ExitIntentPopup'
 import StickyCTA from './components/StickyCTA'
 import WhatsAppButton from './components/WhatsAppButton'
+
+const Problem = lazy(() => import('./components/Problem'))
+const WhatsInside = lazy(() => import('./components/WhatsInside'))
+const Transformation = lazy(() => import('./components/Transformation'))
+const Testimonials = lazy(() => import('./components/Testimonials'))
+const Pricing = lazy(() => import('./components/Pricing'))
+const FAQ = lazy(() => import('./components/FAQ'))
+const ExitIntentPopup = lazy(() => import('./components/ExitIntentPopup'))
 
 function App() {
   const [showExitPopup, setShowExitPopup] = useState(false)
@@ -36,22 +37,26 @@ function App() {
     <div className="noise-overlay relative pb-16 sm:pb-0">
       <Navbar onPurchase={handlePurchase} />
       <Hero onPurchase={handlePurchase} />
-      <Problem />
-      <WhatsInside />
-      <Transformation />
-      <Testimonials />
-      <Pricing onPurchase={handlePurchase} />
-      <FAQ />
+      <Suspense fallback={null}>
+        <Problem />
+        <WhatsInside />
+        <Transformation />
+        <Testimonials />
+        <Pricing onPurchase={handlePurchase} />
+        <FAQ />
+      </Suspense>
 
       <StickyCTA onPurchase={handlePurchase} />
       <WhatsAppButton />
 
       <AnimatePresence>
         {showExitPopup && (
-          <ExitIntentPopup
-            onClose={() => setShowExitPopup(false)}
-            onPurchase={handlePurchase}
-          />
+          <Suspense fallback={null}>
+            <ExitIntentPopup
+              onClose={() => setShowExitPopup(false)}
+              onPurchase={handlePurchase}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
     </div>
