@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Shield, Zap, TrendingUp, Star } from 'lucide-react'
+import { ArrowRight, Shield, Zap, TrendingUp, Star, Users } from 'lucide-react'
 
 export default function Hero({ onPurchase }) {
     return (
@@ -58,6 +58,7 @@ export default function Hero({ onPurchase }) {
                                 { icon: Zap, text: 'Build AI systems that sell for you 24/7' },
                                 { icon: TrendingUp, text: '10x your conversions in 90 days' },
                                 { icon: Shield, text: 'No tech skills required — step-by-step system' },
+                                { icon: Users, text: 'Join our WhatsApp community', link: 'https://chat.whatsapp.com/Lvr7Ysm0SdE4rxhfnyL2d7' },
                             ].map((benefit, i) => (
                                 <motion.div
                                     key={i}
@@ -69,7 +70,13 @@ export default function Hero({ onPurchase }) {
                                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gold-400/20 to-bronze-500/20 flex items-center justify-center shrink-0">
                                         <benefit.icon className="w-4 h-4 text-gold-400" />
                                     </div>
-                                    <span className="text-gray-300 text-sm sm:text-base">{benefit.text}</span>
+                                    {benefit.link ? (
+                                        <a href={benefit.link} target="_blank" rel="noopener noreferrer" className="text-green-400 text-sm sm:text-base font-medium hover:text-green-300 transition-colors underline underline-offset-2">
+                                            {benefit.text} →
+                                        </a>
+                                    ) : (
+                                        <span className="text-gray-300 text-sm sm:text-base">{benefit.text}</span>
+                                    )}
                                 </motion.div>
                             ))}
                         </div>
