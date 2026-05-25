@@ -2,12 +2,10 @@ import { motion } from 'framer-motion'
 import { MessageCircle } from 'lucide-react'
 
 export default function WhatsAppButton() {
-    const phoneNumber = '919876543210' // Replace with actual WhatsApp number
-    const message = encodeURIComponent('Hi! I have a question about the RGCCO Formula book.')
 
     return (
         <motion.a
-            href={`https://wa.me/${phoneNumber}?text=${message}`}
+            href="https://chat.whatsapp.com/Lvr7Ysm0SdE4rxhfnyL2d7"
             target="_blank"
             rel="noopener noreferrer"
             initial={{ scale: 0, opacity: 0 }}
