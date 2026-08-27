@@ -4,11 +4,13 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '')
-  const sheetsUrl = new URL(env.VITE_GOOGLE_SHEETS_URL)
+  const sheetsUrl = env.VITE_GOOGLE_SHEETS_URL
+    ? new URL(env.VITE_GOOGLE_SHEETS_URL)
+    : null
 
   return {
     plugins: [react(), tailwindcss()],
-    server: {
+    server: sheetsUrl ? {
       proxy: {
         '/api/google-reviews': {
           target: sheetsUrl.origin,
@@ -16,6 +18,6 @@ export default defineConfig(({ mode }) => {
           rewrite: () => sheetsUrl.pathname,
         },
       },
-    },
+    } : undefined,
   }
 })
