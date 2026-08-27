@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/google-reviews",
+      "destination": "https://script.google.com/macros/s/AKfycbyWaiKKyLa7kWDzRmTYbVI5nb8EL9obcahoUrGwe_qMQ7Gv5-BrXuWbi8Gr9z4vyQiohA/exec"
+    }
+  ]
+}

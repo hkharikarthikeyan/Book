@@ -1,8 +1,8 @@
 const reviewsUrl = import.meta.env.VITE_GOOGLE_SHEETS_URL
-const requestUrl = import.meta.env.DEV ? '/api/google-reviews' : reviewsUrl
+const requestUrl = '/api/google-reviews'
 
 function getReviewsUrl() {
-    if (!requestUrl) {
+    if (!reviewsUrl) {
         throw new Error('VITE_GOOGLE_SHEETS_URL is not configured')
     }
     return requestUrl
