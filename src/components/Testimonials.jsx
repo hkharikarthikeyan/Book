@@ -2,6 +2,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { Star, ChevronLeft, ChevronRight, Quote, PenLine } from 'lucide-react'
 import ReviewForm from './ReviewForm'
+import { fetchReviews as loadReviews } from '../lib/reviews'
 
 const avatarColors = [
     'from-bronze-400 to-pink-400', 'from-blue-400 to-cyan-400',
@@ -57,9 +58,7 @@ export default function Testimonials() {
 
     const fetchReviews = useCallback(async () => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews`)
-            const data = await res.json()
-            setReviews(data)
+            setReviews(await loadReviews())
         } catch {
             setReviews([])
         } finally {

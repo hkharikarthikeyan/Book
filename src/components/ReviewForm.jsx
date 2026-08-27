@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Star, Send, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { submitReview } from '../lib/reviews'
 
 export default function ReviewForm({ onClose, onSubmitted }) {
     const [formData, setFormData] = useState({ name: '', role: '', rating: 5, text: '' })
@@ -13,12 +14,7 @@ export default function ReviewForm({ onClose, onSubmitted }) {
         setLoading(true)
         setError('')
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/reviews`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData),
-            })
-            if (!res.ok) throw new Error('Failed to submit')
+            await submitReview(formData)
             setSuccess(true)
             setTimeout(() => {
                 onSubmitted()
