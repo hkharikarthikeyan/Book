@@ -1,4 +1,20 @@
-# React + Vite
+# RGCCO Landing Page
+
+## Reviews with Google Sheets
+
+Reviews are stored and loaded through a Google Apps Script web app. Create a Google Sheet with a tab named `Reviews`, then add these headers in row 1:
+
+`id` | `name` | `role` | `rating` | `text` | `createdAt`
+
+Create an Apps Script project from the sheet and paste in the code from [`public/google-apps-script.js`](public/google-apps-script.js). Deploy it as a web app with access set to `Anyone`, then put its `/exec` URL in `.env`:
+
+```env
+VITE_GOOGLE_SHEETS_URL=https://script.google.com/macros/s/YOUR_WEB_APP_ID/exec
+```
+
+Restart Vite after changing `.env`.
+
+The local Vite server proxies review requests through `/api/google-reviews`, because Google Apps Script web apps do not return browser-readable CORS headers. A production deployment must provide the same server-side proxy and set the frontend request URL to that proxy; the Apps Script `/exec` URL should not be called directly by production browser code.
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
